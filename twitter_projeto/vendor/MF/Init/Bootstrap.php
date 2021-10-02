@@ -2,25 +2,30 @@
 
 namespace MF\Init;
 
-abstract class Bootstrap {
+abstract class Bootstrap
+{
 	private $routes;
 
 	abstract protected function initRoutes(); 
 
-	public function __construct() {
+	public function __construct()
+    {
 		$this->initRoutes();
 		$this->run($this->getUrl());
 	}
 
-	public function getRoutes() {
+	public function getRoutes()
+    {
 		return $this->routes;
 	}
 
-	public function setRoutes(array $routes) {
+	public function setRoutes(array $routes) 
+    {
 		$this->routes = $routes;
 	}
 
-	protected function run($url) {
+	protected function run($url)
+    {
 		foreach ($this->getRoutes() as $key => $route) {
 			if($url == $route['route']) {
 				$class = "App\\Controllers\\".ucfirst($route['controller']);
