@@ -13,8 +13,8 @@ abstract class Action {
 	protected function render($view, $layout = 'layout') {
 		$this->view->page = $view;
 
-		if(file_exists("../App/Views/".$layout.".phtml")) {
-			require_once "../App/Views/".$layout.".phtml";
+		if(file_exists("../App/Views/".$layout.".php")) {
+			require_once "../App/Views/".$layout.".php";
 		} else {
 			$this->content();
 		}
