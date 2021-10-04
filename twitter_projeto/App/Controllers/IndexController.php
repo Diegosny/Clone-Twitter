@@ -16,6 +16,8 @@ class IndexController extends Action
 
 	public function inscreverse()
     {
+        $this->view->errorCadastro = false;
+        $this->view->existeRegistro = false;
 		$this->render('inscreverse');
 	}
 
@@ -23,13 +25,31 @@ class IndexController extends Action
     {
         $usuario = Container::getModel('Usuario');
 
-         $usuario->setCampos([
+        $dados = [
             'nome' => $_POST['nome'],
             'email' => $_POST['email'],
-            'senha' => md5($_POST['senha'])
-        ]);
+            'senha' => $_POST['senha']
+        ];
 
-         $usuario->salvaDados();
+
+        $valida = $usuario->validaFormulario($dados);
+        if(! $valida) {
+            $this->view->errorCadastro = true;
+            $this->render('inscreverse');
+            return false;
+        }
+
+        $validaEmail = $usuario->verificaEmail($dados['email']);
+        if($validaEmail) {
+            $this->view->existeRegistro = true;
+            $this->render('inscreverse');
+            return false;
+        }
+
+        $usuario->setCampos($dados);
+        $usuario->salvaDados();
+        
+        return $this->render('cadastro');
     }
 }
 
