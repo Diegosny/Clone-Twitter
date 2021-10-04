@@ -23,12 +23,24 @@ class IndexController extends Action
     {
         $usuario = Container::getModel('Usuario');
 
-         $usuario->setCampos([
+
+        $dados = [
             'nome' => $_POST['nome'],
             'email' => $_POST['email'],
-            'senha' => md5($_POST['senha'])
-        ]);
+            'senha' => $_POST['senha']
+        ];
 
+
+        if(
+            empty($dados['nome']) ||
+            empty($dados['email']) ||
+            empty($dados['senha'])
+        ) {
+            echo 'não se pode ter campos vazios';
+            return false;
+        }
+
+         $usuario->setCampos($dados);
          $usuario->salvaDados();
     }
 }
