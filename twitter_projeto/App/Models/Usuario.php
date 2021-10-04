@@ -40,4 +40,31 @@ class Usuario extends Model
 
         return $this;
     }
+
+    public function validaFormulario(array $dados): bool
+    {            
+       if(
+            empty($dados['nome']) ||
+            empty($dados['email']) ||
+            empty($dados['senha'])
+        ) {
+            return false;
+        }
+
+        return true;
+    }
+
+    public function verificaEmail(string $email): bool
+    {
+        $query = "SELECT * FROM usuarios where email = :email ";
+        $stmt = $this->db->prepare($query);
+        $stmt->bindValue(":email", $email);
+        $stmt->execute();
+
+        $row = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        if(count($row) > 0) {
+            return true;
+        }
+        return false;
+    }
 }
