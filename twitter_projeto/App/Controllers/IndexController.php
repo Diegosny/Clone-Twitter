@@ -16,13 +16,14 @@ class IndexController extends Action
 
 	public function inscreverse()
     {
+        $this->view->errorCadastro = false;
+        $this->view->existeRegistro = false;
 		$this->render('inscreverse');
 	}
 
     public function registrar()
     {
         $usuario = Container::getModel('Usuario');
-
 
         $dados = [
             'nome' => $_POST['nome'],
@@ -31,17 +32,24 @@ class IndexController extends Action
         ];
 
 
-        if(
-            empty($dados['nome']) ||
-            empty($dados['email']) ||
-            empty($dados['senha'])
-        ) {
-            echo 'não se pode ter campos vazios';
+        $valida = $usuario->validaFormulario($dados);
+        if(! $valida) {
+            $this->view->errorCadastro = true;
+            $this->render('inscreverse');
             return false;
         }
 
-         $usuario->setCampos($dados);
-         $usuario->salvaDados();
+        $validaEmail = $usuario->verificaEmail($dados['email']);
+        if($validaEmail) {
+            $this->view->existeRegistro = true;
+            $this->render('inscreverse');
+            return false;
+        }
+
+        $usuario->setCampos($dados);
+        $usuario->salvaDados();
+        
+        return $this->render('cadastro');
     }
 }
 

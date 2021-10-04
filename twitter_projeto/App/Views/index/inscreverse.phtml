@@ -35,6 +35,14 @@
                 </small>
               </div>
               <button type="submit" class="btn btn-primary btn-block">Inscrever-se</button>
+
+              <?php if(isset($this->view->errorCadastro) && $this->view->errorCadastro) { ?>
+                <small class="alert alert-danger text-danger form-text">Erro ao cadastrar, existe campos vazios.</small>  
+              <?php } ?>
+
+              <?php if(isset($this->view->existeRegistro) &&  $this->view->existeRegistro) { ?>
+                <small class="alert alert-danger text-danger form-text">Este usuário já possui um registro.</small>  
+              <?php } ?>
             </form>
 
           </div>
